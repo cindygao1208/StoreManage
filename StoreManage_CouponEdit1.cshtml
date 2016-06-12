@@ -1,0 +1,392 @@
+﻿@using RA.Models
+@{
+    ViewBag.Title = "StoreManage_CouponEdit";
+}
+@{  var ctype = ViewBag.type; }
+
+<link href="~/Content/swiper.min.css" rel="stylesheet" />
+<style type="text/css">
+    .swiper-container {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .swiper-slide {
+        background-size: cover;
+        background-position: center;
+    }
+
+    .swiper-menu {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 30px;
+        background-color: #000;
+        opacity: 0.6;
+        z-index: 10;
+    }
+
+        .swiper-menu .btn-swiper-menu {
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            line-height: 30px;
+        }
+</style>
+
+<form>
+<div class="modal-body">
+    @if (ctype == "S")
+    {
+        var cso = ViewBag.Model as T_CouponSpecialOffers;
+
+        <input type="hidden" id="SLC_ID" name="SLC_ID" value="@cso.CSO_ID">
+        <div class="form-group">
+            <label for="SLC_Type">Coupon Type</label>
+            <label for="SLC_Type" class="form-control">Special Offer</label>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Name">Coupon Name</label>
+            <input type="text" id="SLC_Name" name="SLC_Name" class="form-control" value="@cso.CSO_Name">
+        </div>
+        <div class="form-group">
+            <label for="CSO_Price">Coupon Price<font color="red">*</font></label>
+            <input type="number" id="SLC_Price" name="SLC_Price" class="form-control" value="@cso.CSO_Price">
+        </div>
+        <div class="form-group">
+            <label for="SLC_Count">Total Count<font color="red">*</font></label>
+            <input type="number" id="SLC_Count" name="SLC_Count" class="form-control" value="@cso.CSO_Count">
+        </div>
+        <div class="form-group">
+            <label for="SLC_CountSold">Sold Count<font color="red">*</font></label>
+            <input type="number" id="SLC_CountSold" name="SLC_CountSold" class="form-control" value="@cso.CSO_CountSold">
+        </div>
+        <div class="form-group">
+            <label for="SLC_CountUsed">Used Count<font color="red">*</font></label>
+            <input type="number" id="SLC_CountUsed" name="SLC_CountUsed" class="form-control" value="@cso.CSO_CountUsed">
+        </div>
+
+        <div class="form-group">
+            <label for="SLC_DateShowStart">Show Start Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateShowStart" name="SLC_DateShowStart" class="form-control" value="@cso.CSO_DateShowStart.ToString("yyyy-MM-dd")">
+        </div>
+
+        <div class="form-group">
+            <label for="SLC_DateShowEnd">Show End Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateShowEnd" name="SLC_DateShowEnd" class="form-control" value="@cso.CSO_DateValidityEnd.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group special">
+            <label for="SLC_DateValidityStart">Validity Start Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateValidityStart" name="SLC_DateValidityStart" class="form-control" value="@cso.CSO_DateValidityStart.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="SLC_DateValidityEnd">Validity End Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateValidityEnd" name="SLC_DateValidityEnd" class="form-control" value="@cso.CSO_DateValidityEnd.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="SLC_Summary">Summary</label>
+            <textarea id="SLC_Summary" name="SLC_Summary" class="form-control" rows="5">@cso.CSO_Summary</textarea>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Introduction">Introduction</label>
+            <textarea id="SLC_Introduction" name="SLC_Introduction" class="form-control" rows="5">@cso.CSO_Introduction</textarea>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Content">Details</label>
+            <textarea id="SLC_Content" name="SLC_Content" class="form-control">@cso.CSO_Content</textarea>
+        </div>
+
+    }
+    @if (ctype == "L")
+    {
+        var clto = ViewBag.Model as T_CouponLimitedTimeOffer;
+
+        <input type="hidden" id="SLC_ID" name="SLC_ID" value="@clto.CLTO_ID">
+        <div class="form-group">
+            <label for="SLC_Type">Coupon Type</label>
+            <label for="SLC_Type" class="form-control">Time Limited Offer</label>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Name">Coupon Name</label>
+            <input type="text" id="SLC_Name" name="SLC_Name" class="form-control" value="@clto.CLTO_Name">
+        </div>
+        <div class="form-group">
+            <label for="CSO_Price">Coupon Price<font color="red">*</font></label>
+            <input type="number" id="SLC_Price" name="SLC_Price" class="form-control" value="@clto.CLTO_Price">
+        </div>
+        <div class="form-group">
+            <label for="SLC_Count">Total Count<font color="red">*</font></label>
+            <input type="number" id="SLC_Count" name="SLC_Count" class="form-control" value="@clto.CLTO_Count">
+        </div>
+        <div class="form-group">
+            <label for="SLC_CountSold">Sold Count<font color="red">*</font></label>
+            <input type="number" id="SLC_CountSold" name="SLC_CountSold" class="form-control" value="@clto.CLTO_CountSold">
+        </div>
+        <div class="form-group">
+            <label for="SLC_CountUsed">Used Count<font color="red">*</font></label>
+            <input type="number" id="SLC_CountUsed" name="SLC_CountUsed" class="form-control" value="@clto.CLTO_CountUsed">
+        </div>
+
+        <div class="form-group">
+            <label for="SLC_DateShowStart">Show Start Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateShowStart" name="SLC_DateShowStart" class="form-control" value="@clto.CLTO_DateShowStart.ToString("yyyy-MM-dd")">
+        </div>
+
+        <div class="form-group">
+            <label for="SLC_DateShowEnd">Show End Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateShowEnd" name="SLC_DateShowEnd" class="form-control" value="@clto.CLTO_DateValidityEnd.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group special">
+            <label for="SLC_DateValidityStart">Validity Start Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateValidityStart" name="SLC_DateValidityStart" class="form-control" value="@clto.CLTO_DateValidityStart.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="SLC_DateValidityEnd">Validity End Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateValidityEnd" name="SLC_DateValidityEnd" class="form-control" value="@clto.CLTO_DateValidityEnd.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="SLC_Summary">Summary</label>
+            <textarea id="SLC_Summary" name="SLC_Summary" class="form-control" rows="5">@clto.CLTO_Summary</textarea>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Introduction">Introduction</label>
+            <textarea id="SLC_Introduction" name="SLC_Introduction" class="form-control" rows="5">@clto.CLTO_Introduction</textarea>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Content">Details</label>
+            <textarea id="SLC_Content" name="SLC_Content" class="form-control">@clto.CLTO_Content</textarea>
+        </div>
+
+        <div class="form-group limitedtime">
+            <label for="SLC_OfferDesc1">Offer Description 1</label>
+            <input type="text" id="SLC_OfferDesc1" name="SLC_OfferDesc1" class="form-control" value="@clto.CLTO_OfferDesc1">
+        </div>
+        <div class="form-group limitedtime">
+            <label for="SLC_OfferDesc2">Offer Description 2</label>
+            <input type="text" id="SLC_OfferDesc2" name="SLC_OfferDesc2" class="form-control" value="@clto.CLTO_OfferDesc2">
+        </div>
+    }
+    @if (ctype == "C")
+    {
+        var cdz = ViewBag.Model as T_CouponDollarZone;
+
+        <input type="hidden" id="SLC_ID" name="SLC_ID" value="@cdz.CDZ_ID">
+        <div class="form-group">
+            <label for="SLC_Type">Coupon Type</label>
+            <label for="SLC_Type" class="form-control">Dollar Zone</label>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Name">Coupon Name</label>
+            <input type="text" id="SLC_Name" name="SLC_Name" class="form-control" value="@cdz.CDZ_Name">
+        </div>
+        <div class="form-group">
+            <label for="CSO_Price">Coupon Price<font color="red">*</font></label>
+            <input type="number" id="SLC_Price" name="SLC_Price" class="form-control" value="@cdz.CDZ_Price">
+        </div>
+        <div class="form-group">
+            <label for="SLC_Count">Total Count<font color="red">*</font></label>
+            <input type="number" id="SLC_Count" name="SLC_Count" class="form-control" value="@cdz.CDZ_Count">
+        </div>
+        <div class="form-group">
+            <label for="SLC_CountSold">Sold Count<font color="red">*</font></label>
+            <input type="number" id="SLC_CountSold" name="SLC_CountSold" class="form-control" value="@cdz.CDZ_CountSold">
+        </div>
+        <div class="form-group">
+            <label for="SLC_CountUsed">Used Count<font color="red">*</font></label>
+            <input type="number" id="SLC_CountUsed" name="SLC_CountUsed" class="form-control" value="@cdz.CDZ_CountUsed">
+        </div>
+
+        <div class="form-group">
+            <label for="SLC_DateShowStart">Show Start Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateShowStart" name="SLC_DateShowStart" class="form-control" value="@cdz.CDZ_DateShowStart.ToString("yyyy-MM-dd")">
+        </div>
+
+        <div class="form-group">
+            <label for="SLC_DateShowEnd">Show End Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateShowEnd" name="SLC_DateShowEnd" class="form-control" value="@cdz.CDZ_DateValidityEnd.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group special">
+            <label for="SLC_DateValidityStart">Validity Start Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateValidityStart" name="SLC_DateValidityStart" class="form-control" value="@cdz.CDZ_DateValidityStart.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="SLC_DateValidityEnd">Validity End Date<font color="red">*</font></label>
+            <input type="date" id="SLC_DateValidityEnd" name="SLC_DateValidityEnd" class="form-control" value="@cdz.CDZ_DateValidityEnd.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="SLC_Summary">Summary</label>
+            <textarea id="SLC_Summary" name="SLC_Summary" class="form-control" rows="5">@cdz.CDZ_Summary</textarea>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Introduction">Introduction</label>
+            <textarea id="SLC_Introduction" name="SLC_Introduction" class="form-control" rows="5">@cdz.CDZ_Introduction</textarea>
+        </div>
+        <div class="form-group">
+            <label for="SLC_Content">Details</label>
+            <textarea id="SLC_Content" name="SLC_Content" class="form-control">@cdz.CDZ_Content</textarea>
+        </div>
+}
+        <div class="modal-footer">
+            <div class="form-group">
+                <button type="button" id="btn_save" class="btn btn-primary" data-control="save">Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<input type="hidden" id="ctype" name="ctype" value="@ctype">
+
+<script type="text/javascript">
+    $(function () {
+        getUserDevice();
+
+        api.addEventListener({
+            name: 'keyback'
+        }, function (ret, err) {
+            api.closeFrame();
+        });
+
+        $("#btn_save").on("click", saveCouponCreate);
+    });
+
+
+    function saveCouponCreate() {
+        var j = 0;
+        
+        var offert = $("#ctype").val();
+
+        var slcsid = $("#SLC_SID").val();
+        var slcid = $("#SLC_ID").val();
+        var slcname = $("#SLC_Name").val();
+        var slcsum = $("#SLC_Summary").val();
+        var slcintro = $("#SLC_Introduction").val();
+        var slccont = $("#SLC_Content").val();
+
+        var slcprice = $("#SLC_Price").val();
+        var slccount = $("#SLC_Count").val();
+        var slcscount = $("#SLC_CountSold").val();
+        var slcucount = $("#SLC_CountUsed").val();
+        var slcsstartd = $("#SLC_DateShowStart").val();
+        var slcsendd = $("#SLC_DateShowEnd").val();
+        var slcvstartd = $("#SLC_DateValidityStart").val();
+        var slcvendd = $("#SLC_DateValidityEnd").val();
+
+
+        if (offert == "L") {
+            var slcdesc1 = $("#SLC_OfferDesc1").val();
+            var slcdesc2 = $("#SLC_OfferDesc2").val();
+        }
+        if (!slcprice) {
+            alert("Enter Coupon Price!");
+            return;
+        }
+        if (!slccount) {
+            alert("Enter Total Count!");
+            return;
+        }
+        if (!slcscount) {
+            alert("Enter Sold Count!");
+            return;
+        }
+        if (!slcucount) {
+            alert("Enter Used Count!");
+            return;
+        }
+        if (!slcsstartd) {
+            alert("Enter Coupon Show Start Date!");
+            return;
+        }
+        if (!slcsendd) {
+            alert("Enter Show End Date!");
+            return;
+        }
+        if (!slcvstartd) {
+            alert("Enter Validity Start Date!");
+            return;
+        }
+        if (!slcvendd) {
+            alert("Enter Validity End Date!");
+            return;
+        }
+        
+        if (offert == "S") {
+            var op = {
+                CSO_SID: slcsid,
+                CSO_ID: slcid,
+                CSO_Name: slcname,
+                CSO_Price: slcprice,
+                CSO_Count: slccount,
+                CSO_CountSold: slcscount,
+                CSO_CountUsed: slcucount,
+                CSO_DateShowStart: slcsstartd,
+                CSO_DateShowEnd: slcsendd,
+                CSO_DateValidityStart: slcvstartd,
+                CSO_DateValidityEnd: slcvendd,
+                CSO_Summary: slcsum,
+                CSO_Introduction: slcintro,
+                CSO_Content: slccont
+            };
+        }
+        if (offert == "L") {
+            var op = {
+                CLTO_SID: slcsid,
+                CLTO_ID: slcid,
+                CLTO_Name: slcname,
+                CLTO_Price: slcprice,
+                CLTO_Count: slccount,
+                CLTO_CountSold: slcscount,
+                CLTO_CountUsed: slcucount,
+                CLTO_DateShowStart: slcsstartd,
+                CLTO_DateShowEnd: slcsendd,
+                CLTO_DateValidityStart: slcvstartd,
+                CLTO_DateValidityEnd: slcvendd,
+                CLTO_Summary: slcsum,
+                CLTO_Introduction: slcintro,
+                CLTO_Content: slccont,
+                CLTO_OfferDesc1: slcdesc1,
+                CLTO_OfferDesc2: slcdesc2
+            };
+        }
+        if (offert == "C") {
+            var op = {
+                CDZ_SID: slcsid,
+                CDZ_ID: slcid,
+                CDZ_Name: slcname,
+                CDZ_Price: slcprice,
+                CDZ_Count: slccount,
+                CDZ_CountSold: slcscount,
+                CDZ_CountUsed: slcucount,
+                CDZ_DateShowStart: slcsstartd,
+                CDZ_DateShowEnd: slcsendd,
+                CDZ_DateValidityStart: slcvstartd,
+                CDZ_DateValidityEnd: slcvendd,
+                CDZ_Summary: slcsum,
+                CDZ_Introduction: slcintro,
+                CDZ_Content: slccont
+            };
+        }
+        $.ajax({
+            url: host + "/StoreManage/Ajax_Edit_CouponEdit?callback=?",
+            type: "POST",
+            data: {
+                jsonstr: JSON.stringify(op),
+                ctype: offert
+            },
+            dataType: "json",
+            success: function (json) {
+                if (json.Status) {
+                    ///OpenMessage({ icon: 'Saved Successful!', msg: json.Message });
+                    alert("Coupon saved successful!")
+                    document.location.reload(true);
+                } else {
+                    ///OpenMessage({ icon: 'Error to save', msg: json.Message });
+                    alert("Error to save!")
+                }
+            }
+        });
+    }
+</script>

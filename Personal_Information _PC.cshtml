@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TD Insurance</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="###"><img src="./img/tdi.gif"></a>
+            <ul>
+                <li><a href="###">Products</a></li>
+                <li><a href="###">Claims</a></li>
+                <li><a href="###">Contact Us</a></li>
+            </ul>
+            <ul id="ulRight">
+                <li>
+                    <select>
+                        <option>Ontario</option>
+                        <option>Quebec</option>
+                        <option>B.C.</option>
+                    </select>
+                </li>
+                <li>
+                    <select>
+                        <option>English</option>
+                        <option>Français</option>
+                        <option>简体中文</option>
+                        <option>繁體中文</option>
+                    </select>
+                </li>
+                <li>
+                    <a href="###" id="amp"></a>
+                </li>
+                <li>
+                    <a href="###" id="log">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <form id="main" ng-controller="cancelCtrl" ng-submit="doSomething()">
+        <div id="mainLeft" ng-controller="submitCtrl">
+            <h4>Tell Us About Yourself</h4>
+            <h6>
+                Thanks for choosing TD Insurance! In order to safely set up your new accounts and services, please tell us
+                <br>
+                about yourself.
+            </h6>
+            <h4>Personal Information</h4>
+
+            <div>
+                <select ng-model="person.Title" ng-init="person.Title" ng-change="loadChart(1)" ng-options="t for t in title" required>
+                </select>
+                <input class="fmd" type="text" ng-model="person.FirstName" autofocus placeholder="First Name*" required>
+                <input class="fmd" type="text" ng-model="person.MidName" autofocus placeholder="Middle Initial">
+                <input id="lname" type="text" ng-model="person.LastName" autofocus placeholder="Last Name*" required>
+                <input id="email" type="text" ng-model="person.EmailAdress" class="form-control" autofocus placeholder="Email Address*" required>
+                <img class="clr" src="./img/question.gif">
+                <input class="fmd" type="text" ng-model="person.DateBirth" placeholder="Date of Birth*" onfocus="(this.type='date')" required>
+                <input id="SIN" type="text" ng-model="person.SIN" autofocus placeholder="Social Insurance Number*" required>
+                <img src="./img/question.gif">
+                <button class="orange mLeft mRight" type="submit" ng-model="cancelb" ng-click="cancelb()">Cancel</button>
+                <button class="green" type="submit" ng-model="submitb" ng-click="submitb()">Submit</button>
+            </div>
+        </div>
+        <div id="mainRight">
+            <h6>You are applying for:</h6>
+            <h4>TD&reg; Travel Medical<br>Insurance</h4>
+            <button class="green">See More Coverage Options</button>
+        </div>
+    </form>
+    <footer>
+        <h2>Need to talk to us directly? <a href="###">Contact us ></a></h2>
+
+        <div class="line"></div>
+        <ul>
+            <li><a href="###">Privacy and Security</a></li>
+            <li><a href="###">Legal</a></li>
+            <li><a href="###">Accessibility</a></li>
+            <li><a href="###">About Us</a></li>
+            <li><a href="###">Careers</a></li>
+        </ul>
+        <div class="line"></div>
+        <ul>
+            <li><a href="###"><img src="./img/facebook.gif"></a></li>
+            <li><a href="###"><img src="./img/pigeon.gif"></a></li>
+            <li><a href="###"><img src="./img/video.gif"></a></li>
+            <li><a href="###"><img src="./img/wifi.gif"></a></li>
+        </ul>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.js"></script>
+    <script>
+        angular.module('app', []);
+        angular.module('app').factory('model', ['$http', function ($http) {
+
+            function savePerson(person) {
+                alert(3);
+                var op = {
+                    Title: person.Title,
+                    FirstName: person.FirstName,
+                    MidName: person.MidName,
+                    LastName: person.LastName,
+                    EmailAddress: person.EmailAddress,
+                    DateBirth: person.DateBirth,
+                    SIN: person.SIN
+                }
+
+                host = "http://localhost:55423/";
+                $http({
+                    url: host + "/StoreManage/Http_Save_Person?",
+                    method: "POST",
+                    data: { jsonstr: JSON.stringify(op) }
+                }).then(
+                    function (response) {
+                        var json = response.data;
+                        if (json.Status) {
+                            alert("Your personal info saved successful!")
+                            document.location.reload(true);
+                        } else {
+                            alert("Unsuccessful save your personal info!")
+                        }
+                    },
+                        function (e) {
+                            alert("Error to save!")
+                        }
+                    );
+            };
+
+            var ret = {
+                cancelb: function () {
+                    app.directive("required", function ($rootScope) {
+                        return {
+                            link: function (scope, element, attrs) {
+                                element.remove();
+                            }
+                        }
+                    });
+                },
+
+                submitb: function (person) {
+                    alert(2);
+                    savePerson(person);
+                }
+            };
+            return ret;
+        }]);
+
+        angular.module('app').controller('cancelCtrl', ['$scope', 'model', function ($scope, model) {
+            $scope.title = ["Title*","Mr.", "Mrs.", "Ms."];
+            $scope.person = { Title: $scope.title[0] };
+
+            $scope.cancelb = function () {
+                document.location.reload(true);
+            }
+        }]);
+
+        angular.module('app').controller('submitCtrl', ['$scope', 'model', function ($scope, model) {
+
+            /*if ($scope.person.FirstName == undefined  || $scope.person.LastName == undefined ||
+                $scope.person.EmailAddress == undefined || !$scope.person.DateBirth == undefined ||
+                $scope.person.SIN == undefined || $scope.person.Title == undefined) {
+                alert(0);
+               return;
+            }*/
+
+            $scope.submitb = function () {
+                alert(1);
+                model.submitb($scope.person);
+            };
+        }]);
+
+        /*(function() {angular.directive('select', function ($interpolate) {
+            alert(0);
+            return {
+                restrict: 'E',
+                require: 'ngModel',
+                link: function (scope, elem, attrs, ctrl) {
+                    var defaultOptionTemplate;
+                    scope.defaultOptionText = attrs.defaultOption || 'Title*';
+                    defaultOptionTemplate = '<option value="" disabled selected style="display: none;">{{defaultOptionText}}</option>';
+                    elem.prepend($interpolate(defaultOptionTemplate)(scope));
+                }
+            };
+            });
+        }*/
+
+
+    </script>
+    </body>
+</html>

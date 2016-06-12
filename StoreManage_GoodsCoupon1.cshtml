@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "StoreManage_GoodsCoupon";
+}
+
+<div id="wrap" class="flex-row flex-vertical">
+    <div id="types" class="container-fluid bm">
+        <div class="row">
+            <div class="col-xs-5">
+                <div class="item text-center" data-index="0" onclick="setGroupIndex(0)">Goods Modify</div>
+            </div>
+            <div class="col-xs-5">
+                <div class="item text-center" data-index="1" onclick="setGroupIndex(1)">Coupon Modify</div>
+            </div>
+        </div>
+    </div>
+    <div id="main" class="flex-con"></div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        getUserDevice();
+        openFrameGroup();
+
+        $("#types .item").on("click", setGCGroupIndex);
+    });
+
+    function openFrameGroup() {
+        api.openFrameGroup({
+            name: 'storemanage_gcgroup',
+            rect: {
+                x: 0,
+                y: 75 + $("#types").outerHeight(true),
+                w: $(window).width(),
+                h: $("#main").outerHeight(true)
+            },
+            preload: 2,
+            index: 0,
+            frames: [
+                {
+                    name: 'storemanage_goodslist',
+                    url: 'template.html',
+                    pageParam: { id: uid }
+                },
+                {
+                    name: 'storemanage_couponlist',
+                    url: 'template.html',
+                    pageParam: { id: uid }
+                }
+            ]
+        }, function (ret, err) {
+            if (ret) {
+                $(".item").removeClass("active");
+                $(".item[data-index=" + ret.index + "]").addClass("active");
+            }
+        });
+    }
+
+    function setGCGroupIndex() {
+        var index = $(this).attr("data-index");
+        api.setFrameGroupIndex({
+            name: 'storemanage_gcgroup',
+            index: index
+        });
+    }
+</script>

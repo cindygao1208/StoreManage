@@ -1,0 +1,105 @@
+﻿@using RA.Models
+@model List<T_Goods>
+@{
+    ViewBag.Title = "StoreManage_GoodsList";
+}
+@{
+    var list = ViewBag.UID as List<R_User_Store>;
+}
+
+<div class="modal-body">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int index = 0;
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            @index
+                        </td>
+                        <td>
+                            <div class="swiper-slide"><img class="width100" src="@item.G_DefaultImg" /></div>
+                        </td>
+                        <td>
+                            @item.G_Name
+                            <br><label> </label><br>
+                            <button id="btn_edit" data-id="@item.G_ID" class="glyphicon glyphicon-edit" data-control="edit">&nbsp;Edit&nbsp;</button>
+                            <br><label> </label><br>
+                            <button id="btn_remove" data-id="@item.G_ID" class="glyphicon glyphicon-remove" data-control="remove">Remove</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    var swiper;
+    var gid;
+
+    $(function () {
+        $(".swiper-container").height($(".swiper-container").width());
+        $(".swiper-container .swiper-slide[data-type=default]").css({ "height": $(".swiper-container").width() + "px", "line-height": $(".swiper-container").width() + "px" });
+        $(window).resize(function () {
+            $(".swiper-container").height($(".swiper-container").width());
+            $(".swiper-container .swiper-slide[data-type=default]").css({ "height": $(".swiper-container").width() + "px", "line-height": $(".swiper-container").width() + "px" });
+        });
+
+        getUserDevice();
+
+        $(".glyphicon-remove").on("click", function () {
+            gid = $(this).attr("data-id");
+            var afirm = confirm("Do you really want to delete this Goods?");
+            if (afirm) {
+                editGoodsRemove();
+            } else {
+                return
+            }
+        });
+        $(".glyphicon-edit").on("click", function () {
+            gid = $(this).attr("data-id");
+            editGoodsEdit();
+        });
+
+    });
+
+    function editGoodsRemove() {
+        op = { G_ID: gid };
+        $.ajax({
+            url: host + "/StoreManage/Ajax_Delete_GoodsList?callback=?",
+            type: "POST",
+            data: {
+                jsonstr: JSON.stringify(op)
+            },
+            dataType: "json",
+            success: function (json) {
+                if (json.Status) {
+                    ///OpenMessage({ icon: 'Saved Successful!', msg: json.Message });
+                    alert("Deleted successful!")
+                    document.location.reload(true);
+                } else {
+                    ///OpenMessage({ icon: 'Error to save', msg: json.Message });
+                    alert("Error to Delete!")
+                }
+            }
+        });
+    }
+
+    function editGoodsEdit() {
+        api.openWin({
+            name: 'storemanagegoods',
+            url: 'template.html',
+            pageParam: { uid: uid, gid: gid }
+        });
+    }
+</script>

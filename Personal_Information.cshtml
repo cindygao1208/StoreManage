@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <style>
+        .headbar {
+            margin: 0;
+            background: #12422B;
+            color: #fefefe;
+        }
+
+        .logo {
+            width: 40px;
+            top: -7px;
+            position: relative;
+        }
+
+        .logotxt {
+            color: white !important;
+            font-size: 1.3em;
+        }
+
+        .bodybg {
+            background-color: #EFEFF4;
+            padding: 50px 100px;
+        }
+
+        .talk {
+            text-align: right;
+        }
+
+        .talkcontact {
+            text-align: center;
+        }
+
+        .ttt {
+            margin: 0 10px;
+        }
+
+        .footerbar {
+            background: #1A5336 url(https://www.tdcanadatrust.com/images/evergreen/icons/32x32/Chair.png) no-repeat bottom left;
+            color: #E5F2F1;
+            padding: 30px 0;
+        }
+
+        .media {
+            font-size: 30px;
+            border: 2px solid white;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .privacy {
+            border-top: 1px solid green;
+            border-bottom: 1px solid green;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .bodybg {
+                padding: 10px;
+        }
+
+        .talk {
+            text-align: center;
+        }
+        .ttt {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .apply {
+            text-align: center;
+        }
+        .footerbar {
+            background: #1A5336 url(https://www.tdcanadatrust.com/images/evergreen/icons/32x32/Chair.png) no-repeat bottom left;
+            color: #E5F2F1;
+            padding: 30px 0;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="headbar navbar navbar-default ">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img class="logo" src="//www.tdcanadatrust.com/images/evergreen/logos/td_shield_nowhitespace.gif" alt="TD"></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="#" class="logotxt">TD Insurance</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">Claims</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ontario <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Alberta</a></li>
+                            <li><a href="#">Nova Scotia</a></li>
+                            <li><a href="#">British Columbia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">EN<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">FR</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href=""><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+                    </li>
+                    <li>
+                        <a href=""><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Login</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid bodybg">
+        <div class="row">
+            <div class="col-sm-9">
+                <h3>Tell Us About Yourself</h3>
+                <h5>Thanks for choosing TD Insurance! In order to safely set up your new accounts and services, please tell us about yourself.</h5>
+                <h3>Personal Information</h3>
+                <form class="form" ng-controller="cancelCtrl">
+                    <div ng-controller="submitCtrl">
+                    <div class="row">
+                        <div class="form-group col-sm-3">
+                            <select ng-model="person.Title" ng-init="person.Title" ng-change="loadChart(1)" ng-options="t for t in title" class="form-control" required>
+                                <option value="">Title*</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <input type="text" id="person.FirstName" ng-model="person.FirstName" class="form-control" placeholder="First Name*" required>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <input type="text" id="person.MidName" ng-model="person.MidName" class="form-control" placeholder="Middle Initial">
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <input type="text" id="person.LastName" ng-model="person.LastName" class="form-control" placeholder="Last Name*" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <input type="email" id="person.EmailAdress" ng-model="person.EmailAddress" class="form-control" placeholder="Email Address*" required>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <input type="text" id="person.DateBirth" ng-model="person.DateBirth" class="form-control" placeholder="Date of Birth*" onfocus="(this.type='date')" required>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <input type="number" id="person.SIN" ng-model="person.SIN" class="form-control" placeholder="Social Insurance Number*" maxlength="9" required>
+                        </div>
+                    </div>
+                    <div class="form-group" style="text-align: right">
+                        <button type="submit" ng-model="cancelb" class="btn btn-danger" ng-click="cancelb()">Cancel</button>
+                        <button type="submit" ng-model="submitb" class="btn btn-success" ng-click="submitb()">Submit</button>
+                    </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-3 apply">
+                <h5>You are applying for:</h5>
+                <h4 style="margin: 40px 0;">TD&reg; Travel Medical Insurance</h4>
+                <a class="btn btn-success" role="button" href="#">See More Coverage Options</a>
+            </div>
+        </div>
+    </div>
+    <div class="footerbar">
+        <div style="margin: 0 21%;">
+            <div class="container-fluid talkcontact">
+                <div class="row" style="margin:20px 0">
+                    <span class="ttt" style="font-size: 25px;">Need to talk to us direcly?</span>
+                    <span class="ttt" style="font-size: 20px;"><a href="">Contact us ></a></span>
+                </div>
+            </div>
+            <div class="container-fluid talkcontact privacy">
+                <div>
+                    <span class="ttt">Privacy and Security</span>
+                    <span class="ttt">Legal</span>
+                    <span class="ttt">Accessibility</span>
+                    <span class="ttt">About Us</span>
+                    <span class="ttt">Careers</span>
+                </div>
+            </div>
+            <div>
+                <div class="row talkcontact">
+                    <span class="glyphicon glyphicon-lock media" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-cog media" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-comment media" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-hdd media" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.js"></script>
+<script>
+    angular.module('app', []);
+    angular.module('app').factory('model', ['$http', function ($http) {
+
+        function savePerson(person) {
+            alert(3);
+            var op = {
+                Title: person.Title,
+                FirstName: person.FirstName,
+                MidName: person.MidName,
+                LastName: person.LastName,
+                EmailAddress: person.EmailAddress,
+                DateBirth: person.DateBirth,
+                SIN: person.SIN
+            }
+
+            host = "http://localhost:55423/";
+            $http({
+                url: host + "/StoreManage/Http_Save_Person?",
+                method: "POST",
+                data: { jsonstr: JSON.stringify(op) }
+            }).then(
+                function (response) {
+                    var json = response.data;
+                    if (json.Status) {
+                        alert("Your personal info saved successful!")
+                        document.location.reload(true);
+                    } else {
+                        alert("Unsuccessful save your personal info!")
+                    }
+                },
+                    function (e) {
+                        alert("Error to save!")
+                    }
+                );
+        };
+
+        var ret = {
+            cancelb: function () {
+                app.directive("required", function ($rootScope) {
+                    return {
+                        link: function (scope, element, attrs) {
+                            element.remove();
+                        }
+                    }
+                });
+            },
+
+            submitb: function (person) {
+                alert(2);
+                savePerson(person);
+            }
+        };
+        return ret;
+    }]);
+
+    angular.module('app').controller('cancelCtrl', ['$scope', 'model', function ($scope, model) {
+        $scope.title = ["Mr..", "Mrs.", "Ms."];
+        //$scope.person = { Title: $scope.title[0] };
+
+        $scope.cancelb = function () {
+            document.location.reload(true);
+        }
+    }]);
+
+    angular.module('app').controller('submitCtrl', ['$scope', 'model', function ($scope, model) {
+
+        alert(0);
+        $scope.submitb = function () {
+            if (!$scope.person.FirstName || !$scope.person.LastName ||
+                !$scope.person.EmailAddress || !$scope.person.DateBirth ||
+                !$scope.person.SIN) {
+                return;
+            }
+
+            alert(1);
+            model.submitb($scope.person);
+        };
+    }]);
+
+    /*(function() {angular.directive('select', function ($interpolate) {
+        alert(0);
+        return {
+            restrict: 'E',
+            require: 'ngModel',
+            link: function (scope, elem, attrs, ctrl) {
+                var defaultOptionTemplate;
+                scope.defaultOptionText = attrs.defaultOption || 'Title*';
+                defaultOptionTemplate = '<option value="" disabled selected style="display: none;">{{defaultOptionText}}</option>';
+                elem.prepend($interpolate(defaultOptionTemplate)(scope));
+            }
+        };
+        });
+    }*/
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+﻿@model List<RA.Models.T_OrdersDetailCode>
+
+@{
+    ViewBag.Title = "StoreManage_Verification";
+}
+
+<div class="container-fluid" id="storemanage_verification">
+    <div class="row">
+        <div class="col-xs-12 mt15">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" id="txt_code" class="form-control" placeholder="Please Enter Code">
+                    <span class="input-group-btn">
+                        <button id="btn_search" class="btn btn-primary" type="button">Search</button>
+                    </span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Title</th>
+                            <th>Used Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.ODC_Code
+                                </td>
+                                <td>
+                                    @item.T_OrdersDetail.OD_Title
+                                </td>
+                                <td>
+                                    @(item.ODC_DateUse.HasValue ? item.ODC_DateUse.Value.ToString(@"MM/dd/yyyy hh:mm t\M") : string.Empty)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_code" tabindex="" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal_title"></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <img class="img-responsive center-block" id="modal_img" />
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_type">Type</label>
+                        <p id="modal_type" class="form-control-static"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_price">Price</label>
+                        <p id="modal_price" class="form-control-static"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_summary">Summary</label>
+                        <p id="modal_summary" class="form-control-static"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_introduction">Introduction</label>
+                        <p id="modal_introduction" class="form-control-static"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="button" id="btn_verify" class="btn btn-primary btn-block">Use</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        getUserDevice();
+        //uid = 'F8D3E428-DE4C-45FE-B343-AC67B98EA930';
+        $("#btn_search").on("click", search);
+        $("#btn_verify").on("click", verify);
+    });
+
+    function search() {
+        if (uid == '') {
+            return;
+        }
+
+        var code = $("#txt_code").val();
+        if (!code) {
+            $(this).parents(".input-group").addClass("has-error");
+            return;
+        }
+
+        $(this).parents(".input-group").removeClass("has-error");
+
+        $.ajax({
+            url: host + "/StoreManage/Ajax_Search_Verification?callback=?",
+            type: "POST",
+            data: {
+                id: uid,
+                code: code
+            },
+            dataType: "json",
+            success: function (json) {
+                if (json.Status) {
+                    $("#modal_title").html(json.Model.OD_Title);
+                    $("#modal_img").attr("src", json.Model.OD_DefaultPic);
+                    $("#modal_type").html(json.Model.OD_Type);
+                    $("#modal_price").html(json.Model.OD_EachPrice);
+                    $("#modal_summary").html(json.Model.OD_Summary);
+                    $("#modal_introduction").html(json.Model.OD_Introduction);
+                    $("#btn_verify").attr("data-id", json.Model.ODC_ID);
+                    $("#modal_code").modal("show");
+                } else {
+                    OpenMessage({ icon: 'no', msg: json.Message });
+                }
+            }
+        });
+    }
+
+    function verify() {
+        var id = $(this).attr("data-id");
+        if (!id) {
+            return;
+        }
+
+        $.ajax({
+            url: host + "/StoreManage/Ajax_Verify_Verification?callback=?",
+            type: "POST",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            success: function (json) {
+                if (json.Status) {
+                    var tbody = $(".table tbody");
+                    tbody.prepend("<tr><td>" + json.Model.ODC_Code + "</td><td>" + json.Model.OrdersDetail.OD_Title + "</td><td>" + json.Model.ODC_DateUse + "</td></tr>");
+                    if (tbody.children().length > 5) {
+                        tbody.children().last().remove();
+                    }
+                } else {
+                    OpenMessage({ icon: 'no', msg: json.Message });
+                }
+                $("#modal_code").modal("hide");
+            }
+        });
+    }
+</script>

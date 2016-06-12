@@ -1,0 +1,500 @@
+﻿@using RA.Models
+@model List<T_Store>
+
+@{
+    ViewBag.Title = "StoreManage_GoodsCreate";
+ }
+ @{
+    var list = ViewBag.G_GTID as List<T_GoodsType>;
+    var list1 = ViewBag.ShopList as List<T_Store>;
+    foreach (var item1 in list1)
+    {
+        var gsid = item1.S_ID;
+     }
+}
+
+    <link href="~/Content/swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .swiper-container {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .swiper-slide {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .swiper-menu {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background-color: #000;
+            opacity: 0.6;
+            z-index: 10;
+        }
+
+            .swiper-menu .btn-swiper-menu {
+                margin: 0;
+                padding: 0;
+                background-color: transparent;
+                border: none;
+                color: #fff;
+                line-height: 30px;
+            }
+    </style>
+            <div class="modal-dialog">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide text-center text-muted" data-type="default"><i class="fa fa-camera fa-5x"></i></div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+
+                </div>
+            </div>
+
+            @*<div class="swiper-menu flex-row">
+                <button type="button" class="btn-swiper-menu flex-con" data-control="camera"><i class="fa fa-camera" aria-hidden="true"></i></button>
+                <button type="button" class="btn-swiper-menu flex-con" data-control="library"><i class="fa fa-folder-open" aria-hidden="true"></i></button>
+                <button type="button" class="btn-swiper-menu flex-con" data-control="remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            </div>*@
+
+            <div class="modal fade" id="modal_swiper_menu">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-default btn-block btn-swiper-menu" data-control="camera"><div class="text-left">Take Photo <i class="fa fa-camera pull-right" aria-hidden="true"></i></div></button>
+                            <button type="button" class="btn btn-default btn-block btn-swiper-menu" data-control="library"><div class="text-left">Photo Library</div><i class="fa fa-folder-open pull-right" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-default btn-block btn-swiper-menu" data-control="remove"><div class="text-left">Remove Photo</div><i class="fa fa-trash pull-right" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="G_Name">Item Name<font color="red">*</font> </label>
+                        <input type="text" id="G_Name" name="G_Name" class="form-control">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_NumberOfItem">Number Of Item<font color="red">*</font></label>
+                        <input type="text" id="G_NumberOfItem" name="G_NumberOfItem" class="form-control" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_Price">Price<font color="red">*</font></label>
+                        <input type="number" id="G_Price" name="G_Price" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_PriceMarket">Original Price</label>
+                        <input type="number" id="G_PriceMarket" name="G_PriceMarket" class="form-control">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_Count">Merchandise Code<font color="red">*</font></label>
+                        <input type="number" id="G_Count" name="G_Count" class="form-control" value="1">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_GTID">Category</label>
+
+
+                    </div>
+                    <div class="form-group">
+                        <label for="G_Long">Long - Inches</label>
+                        <input type="number" id="G_Long" name="G_Long" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_Width">Width - Inches</label>
+                        <input type="number" id="G_Width" name="G_Width" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_High">High - Inches</label>
+                        <input type="number" id="G_High" name="G_High" class="form-control">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_Freight">Shipping Size</label>
+                        <select id="G_Freight" name="G_Freight" class="form-control">
+                            @foreach (var item in SiteConfig.GoodsFreight)
+                            {
+                            <option value="@item.Value">@item.Key</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group hidden">
+                        <label for="">Status</label>
+                        <div class="checkbox">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="G_New" name="G_New" value="false"> New
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="G_Hot" name="G_Hot" value="false"> Hot
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="G_Discount" name="G_Discount" value="false"> Discount
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="G_Status" name="G_Status" value="false" onselect="true"> Added
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="G_Gift" name="G_Gift" value="false"> Gift
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group gift-selected" hidden>
+                        <label for="CG_Name">Gift Name<font color="red">*</font></label>
+                        <input type="text" id="CG_Name" name="CG_Name" class="form-control">
+                    </div>
+                    <div class="form-group gift-selected" hidden>
+                        <label for="CG_Type">Gift Type</label>
+                        <select id="CG_Type" name="CG_Type" class="form-control">
+                            @foreach (var item in Enum.GetValues(typeof(Coupon_Gift_Type)))
+                            {
+                            var val = Convert.ToInt32(Enum.Parse(typeof(Coupon_Gift_Type), item.ToString()));
+                            <option value="@val">@item</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group gift-selected" hidden>
+                        <label for="CG_DateShowStart">Gift Show Start Date<font color="red">*</font></label>
+                        <input type="date" id="CG_DateShowStart" name="CG_DateShowStart" class="form-control">
+                    </div>
+                    <div class="form-group gift-selected" hidden>
+                        <label for="CG_DateShowEnd">Gift Show End Date<font color="red">*</font></label>
+                        <input type="date" id="CG_DateShowEnd" name="CG_DateShowEnd" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="G_PlaceOfOrigin">Place Of Origin</label>
+                        <input type="text" id="G_PlaceOfOrigin" name="G_PlaceOfOrigin" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_Period">Period</label>
+                        <input type="text" id="G_Period" name="G_Period" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_MaterialsAndTechniques">Materials And Techniques</label>
+                        <input type="text" id="G_MaterialsAndTechniques" name="G_MaterialsAndTechniques" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_Condition">Condition</label>
+                        <input type="text" id="G_Condition" name="G_Condition" class="form-control">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_Wear">Wear</label>
+                        <input type="text" id="G_Wear" name="G_Wear" class="form-control">
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_DealerLocation">Dealer Location</label>
+                        <input type="text" id="G_DealerLocation" name="G_DealerLocation" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="G_Summary">Detail Description</label>
+                        <textarea id="G_Summary" name="G_Summary" class="form-control" rows="5"></textarea>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_Introduction">Introduction</label>
+                        <textarea id="G_Introduction" name="G_Introduction" class="form-control" rows="5"></textarea>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="G_Content">Details</label>
+                        <textarea id="G_Content" name="G_Content" class="form-control"></textarea>
+                    </div>
+
+                    @if (list1.Count > 1)
+                    {
+                    <div class="form-group">
+                        <div class="store-name">
+                            <label for="S_Name">Store Name<font color="red">*</font></label>
+                            <div class="checkbox">
+                                @foreach (var item in list1)
+                                {
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="G_SID1" name="G_SID1" value="@item.S_ID">@item.S_Name / @item.S_Phone
+                                </label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <button type="button" id="btn_save" class="btn btn-primary" data-control="save">Save</button>
+                    </div>
+                </div>
+            </form>
+
+
+            <script type="text/javascript">
+                var swiper;
+                var p = 0;
+
+                $(function () {
+                    $(".swiper-container").height($(".swiper-container").width());
+                    $(".swiper-container .swiper-slide[data-type=default]").css({ "height": $(".swiper-container").width() + "px", "line-height": $(".swiper-container").width() + "px" });
+                    $(window).resize(function () {
+                        $(".swiper-container").height($(".swiper-container").width());
+                        $(".swiper-container .swiper-slide[data-type=default]").css({ "height": $(".swiper-container").width() + "px", "line-height": $(".swiper-container").width() + "px" });
+                    });
+
+
+                    swiper = new Swiper('.swiper-container', {
+                        nextButton: '.swiper-button-next',
+                        prevButton: '.swiper-button-prev'
+                    });
+
+                    $(".swiper-container").on("click", function () { $('#modal_swiper_menu').modal('show') });
+                    $(".btn-swiper-menu").on("click", swiperControl);
+
+                    $("#btn_save").on("click", saveGoodsCreate);
+
+                    $("#G_Gift").on("click", function () {
+                        if ($(this).prop("checked")) {
+                            $(".gift-selected").removeClass("hidden");
+                        } else {
+                            $(".gift-selected").addClass("hidden");
+                        }
+                    });
+
+                });
+
+                function swiperControl() {
+                    var control = $(this).attr("data-control");
+                    if (control == 'remove') {
+                        delPicture();
+                    } else {
+                        api.getPicture({
+                            sourceType: control,
+                            allowEdit: true,
+                            quality: 50,
+                            targetWidth: 1000,
+                            targetHeight: 1000
+                        }, function (ret, err) {
+                            if (ret) {
+                                api.ajax({
+                                    url: host + "/FileUpload/Index",
+                                    method: 'post',
+                                    data: {
+                                        values: {
+                                            path: 'goodsimage',
+                                            type: ''
+                                        },
+                                        files: {
+                                            file: ret.data
+                                        }
+                                    }
+                                }, function (ret, err) {
+                                    if (ret) {
+                                        if (ret.Status) {
+                                            $(ret.Model).each(function (index) {
+                                                addPicture(ret.Model[index]);
+                                            });
+                                        } else {
+                                            OpenMessage({ icon: 'no', msg: "1:" + err.msg });
+                                        }
+                                    } else {
+                                        OpenMessage({ icon: 'no', msg: "2:" + err.msg });
+                                    }
+                                });
+                            } else {
+                                OpenMessage({ icon: 'no', msg: "3:" + err.msg });
+                            }
+                        });
+                    }
+                }
+
+                function addPicture(path) {
+                    if (p == 0) {
+                        swiper.removeSlide(swiper.activeIndex);
+                    }
+                    swiper.appendSlide('<div class="swiper-slide"><img class="width100" src="' + path + '" /></div>');
+                    p++;
+                }
+
+                function delPicture() {
+                    swiper.removeSlide(swiper.activeIndex);
+                    p = p - 1;
+                }
+
+                function saveGoodsCreate() {
+                    var picture = [];
+                    var i = 0;
+                    var shop = [];
+                    var j = 0;
+
+                    $("input[name=G_SID1]:checked").each(function () {
+                        //alert($(this).val());
+                        shop.push($(this).val());
+                        j++;
+                    });
+
+                    if (j == 0) {
+                        var gsid = $("#G_SID").val();
+                        if (!gsid) {
+                            alert("Please select your Stores!");
+                            return;
+                        }
+                    }
+
+                    if (p > 0) {
+                        $(".swiper-slide").each(function () {
+                            picture.push($(this).children(".width100").attr("src"));
+                            i++;
+                        });
+                        dimg = picture[0];
+                    } else {
+                        dimg = "Default";
+                        picture.push(dimg);
+
+                    }
+
+                    var pic = picture;
+                    var gname = $("#G_Name").val();
+                    if (!gname) {
+                        alert("Enter Goods Name!");
+                        return;
+                    }
+                    var nofitem = 1;
+                    //var nofitem = $("#G_NumberOfItem").val();
+                    //if (!nofitem) {
+                    //    alert("Enter Number of Item!");
+                    //    return;
+                    //}
+                    var gprice = $("#G_Price").val();
+                    if (!gprice) {
+                        alert("Enter Goods Price!");
+                        return;
+                    }
+
+                    var gpricem = $("#G_PriceMarket").val();
+                    if (!gpricem) {
+                        gpricem = 0;
+                    }
+                    var gcount = 1;
+                    //var gcount = $("#G_Count").val();
+                    //if (!gcount) {
+                    //    alert("Enter Goods Count!");
+                    //    return;
+                    //}
+                    var gtid = $("#G_GTID").val();
+                    var gtypec = $("#G_GTID option:selected").attr("data-code");
+                    var glong = $("#G_Long").val();
+                    if (!glong) {
+                        glong = 0;
+                    }
+                    var gwidth = $("#G_Width").val();
+                    if (!gwidth) {
+                        gwidth = 0;
+                    }
+                    var ghigh = $("#G_High").val();
+                    if (!ghigh) {
+                        ghigh = 0;
+                    }
+                    var gfree = $("#G_Freight").val();
+                    if (!gfree) {
+                        gfree = 0;
+                    }
+                    var gnew = $("#G_New").prop("checked");
+                    var ghot = $("#G_Hot").prop("checked");
+                    var gdis = $("#G_Discount").prop("checked");
+                    var gstatus = $("#G_Status").prop("checked");
+                    var ggift = $("#G_Gift").prop("checked");
+
+                    //if (ggift) {
+                    var cgname = "gift";
+                    //var cgname = $("#CG_Name").val();
+                    //if (!cgname) {
+                    //    alert("Enter Gift Name!");
+                    //    return;
+                    //}
+                    var cgtype = 0;
+                    //var cgtype = $("#CG_Type").val();
+                    var cgdstart = "01/01/2116";
+                    //var cgdstart = $("#CG_DateShowStart").val();
+                    //if (!cgdstart) {
+                    //    alert("Enter Gift Show Start Date!");
+                    //    return;
+                    //}
+                    var cgdend = "01/01/2116";
+                    //var cgdend = $("#CG_DateShowEnd").val();
+                    //if (!cgdend) {
+                    //    alert("Enter Gift Show End Date!");
+                    //    return;
+                    //}
+                    //}
+
+                    var gpforigin = $("#G_PlaceOfOrigin").val();
+                    var gperiod = $("#G_Period").val();
+                    var gmatech = $("#G_MaterialsAndTechniques").val();
+                    var gcond = $("#G_Condition").val();
+                    var gwear = $("#G_Wear").val();
+                    var gdloca = $("#G_DealerLocation").val();
+                    var gsum = $("#G_Summary").val();
+                    var gintro = $("#G_Introduction").val();
+                    var gcont = $("#G_Content").val();
+
+                    var op = {
+                        G_DefaultImg: dimg,
+                        G_Picture: pic,
+                        G_Name: gname,
+                        G_NumberOfItem: nofitem,
+                        G_Price: gprice,
+                        G_PriceMarket: gpricem,
+                        G_Count: gcount,
+                        G_GTID: gtid,
+                        G_TypeCode: gtypec,
+                        G_Long: glong,
+                        G_Width: gwidth,
+                        G_High: ghigh,
+                        G_Freight: gfree,
+                        G_New: gnew,
+                        G_Hot: ghot,
+                        G_Discount: gdis,
+                        G_Status: gstatus,
+                        G_Gift: ggift,
+
+                        CG_Name: cgname,
+                        CG_Type: cgtype,
+                        CG_DateShowStart: cgdstart,
+                        CG_DateShowEnd: cgdend,
+
+                        G_PlaceOfOrigin: gpforigin,
+                        G_Period: gperiod,
+                        G_MaterialsAndTechniques: gmatech,
+                        G_Condition: gcond,
+                        G_Wear: gwear,
+                        G_DealerLocation: gdloca,
+                        G_Summary: gsum,
+                        G_Introduction: gintro,
+                        G_Content: gcont,
+                        G_SID: '@gsid',
+                        G_Shop: shop
+                    };
+                    $.ajax({
+                        url: host + "/StoreManage/Ajax_Update_GoodsCreate?callback=?",
+                        type: "POST",
+                        data: {
+                            jsonstr: JSON.stringify(op),
+                            checkj: j
+                        },
+                        dataType: "json",
+                        success: function (json) {
+                            if (json.Status) {
+                                $("#G_ID").html(json.Model.G_ID);
+                                ///OpenMessage({ icon: 'Saved Successful!', msg: json.Message });
+                                alert("Goods saved successful!")
+                                document.location.reload(true);
+                            } else {
+                                ///OpenMessage({ icon: 'Error to save', msg: json.Message });
+                                alert("Error to save!")
+                            }
+                        }
+                    });
+                }
+
+            </script>

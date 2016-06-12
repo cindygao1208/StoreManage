@@ -1,0 +1,229 @@
+﻿@using RA.Models
+@model List<T_CouponSpecialOffers>
+@{
+    ViewBag.Title = "StoreManage_CouponList";
+}
+@{
+    var list = ViewBag.UID as List<R_User_Store>;
+}
+
+<div class="modal-body">
+    <div class="form-group">
+        <label for="SLC_Type">Coupon Type</label>
+        <select id="SLC_Type" name="SLC_Type" class="form-control coupon-type">
+            <option value="SLC_SpecialOffers">Special Offers</option>
+            <option value="SLC_LimitedTimeOffer">Limited Time Offer</option>
+            <option value="SLC_CouponDollarZone">Coupon Dollar Zone</option>
+        </select>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody class="offer-type">
+            @{
+                int index = 0;
+                foreach (var item in Model)
+                {
+                    index++;
+
+                        <tr>
+                            <td>
+                                @index
+                            </td>
+                            <td>
+                                @item.CSO_Name
+                            </td>
+                            <td>
+                                @item.CSO_Price
+                            </td>
+                            <td>
+                                <button data-id="@item.CSO_ID" class="glyphicon glyphicon-edit btn_edit" data-type="S">&nbsp;Edit&nbsp;</button>
+                                <br><label> </label><br>
+                                <button data-id="@item.CSO_ID" class="glyphicon glyphicon-remove btn_remove" data-type="S">Remove</button>
+                            </td>
+                        </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@foreach (var item1 in list)
+{
+    <input type="hidden" id="SLC_UID" name="SLC_UID" value="@item1.US_UID">
+}
+<script type="text/javascript">
+    var swiper;
+
+    $(function () {
+        getUserDevice();
+        //uid = $("#SLC_UID").val();
+
+        $(".coupon-type").on("change", function () {
+            if ($("#SLC_Type option:selected").val() == "SLC_LimitedTimeOffer") {
+                getLimitedTimeOfferList();
+            } else if ($("#SLC_Type option:selected").val() == "SLC_CouponDollarZone") {
+                getDollarZoneList();
+            } else {
+                document.location.reload(true);
+            }
+        });
+
+        $(".offer-type").on("click", ".btn_edit", editConponEdit);
+        $(".offer-type").on("click", ".btn_remove", editCouponRemove);
+
+    });
+
+    function editCouponRemove() {
+        var ctype;
+        var slcid;
+
+        slcid = $(this).attr("data-id");
+        ctype = $(this).attr("data-type");
+        if (ctype == "S") {
+            op = {CSO_ID: slcid};
+        } else if (ctype == "L") {
+            op = {CLTO_ID: slcid};
+        } else {
+            op = {CDZ_ID: slcid};
+        }
+
+        var afirm = confirm("Do you really want to delete this Coupon?");
+        if (afirm) {
+            $.ajax({
+                url: host + "/StoreManage/Ajax_Delete_CouponList?callback=?",
+                type: "POST",
+                data: {
+                    jsonstr: JSON.stringify(op),
+                    ctype: ctype
+                },
+                dataType: "json",
+                success: function (json) {
+                    if (json.Status) {
+                        ///OpenMessage({ icon: 'Saved Successful!', msg: json.Message });
+                        alert("Deleted successful!")
+                        document.location.reload(true);
+                    } else {
+                        ///OpenMessage({ icon: 'Error to save', msg: json.Message });
+                        alert("Error to Delete!")
+                    }
+                }
+            });
+        } else {
+            return
+        }
+
+    }
+
+    function editConponEdit() {
+        var ctype;
+        var slcid;
+
+        slcid = $(this).attr("data-id");
+        ctype = $(this).attr("data-type");
+
+        api.openWin({
+            name: 'storemanagecoupon',
+            url: 'template.html',
+            pageParam: { uid: uid, id: slcid, ctype: ctype }
+        });
+    }
+
+    function getLimitedTimeOfferList() {
+        $.ajax({
+            url: host + "/StoreManage/Ajax_list_LimitedTimeOffer?callback=?",
+            type: "POST",
+            data: {
+                id: uid
+            },
+            dataType: "json",
+            success: function (json) {
+                //alert(JSON.stringify(json));
+                if (json.Status) {
+                    //$("#tmpl_limitedtimeoffer").tmpl(json).appendTo(".offer-type");
+                    if (!json.Count) {
+                        alert("There is no Coupon for Limited Time Offer!");
+                    } else {
+                        $(".offer-type").html($("#tmpl_limitedtimeoffer").tmpl(json));
+                    }
+                } else {
+                    OpenMessage({ icon: 'no', msg: json.Message });
+                }
+            }
+        });
+    }
+
+    function getDollarZoneList() {
+        $.ajax({
+            url: host + "/StoreManage/Ajax_list_DollarZone?callback=?",
+            type: "POST",
+            data: {
+                id: uid
+            },
+            dataType: "json",
+            success: function (json) {
+                if (json.Status) {
+                    if (!json.Count) {
+                        alert("There is no Coupon for Dollar Zone!");
+                    } else {
+                        $(".offer-type").html($("#tmpl_dollarzone").tmpl(json));
+                    }
+                } else {
+                    OpenMessage({ icon: 'no', msg: json.Message });
+                }
+            }
+        });
+
+    }
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_limitedtimeoffer">
+
+    {{each(i,item) Model}}
+    <tr>
+        <td>
+            ${i+1}
+        </td>
+        <td>
+            ${item.CLTO_Name}
+        </td>
+        <td>
+            ${item.CLTO_Price}
+        </td>
+        <td>
+            <button data-id="${item.CLTO_ID}" class="glyphicon glyphicon-edit btn_edit" data-type="L">&nbsp;Edit&nbsp;</button>
+            <br><label> </label><br>
+            <button data-id="${item.CLTO_ID}" class="glyphicon glyphicon-remove btn_remove" data-type="L">Remove</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="tmpl_dollarzone">
+
+    {{each(i,item) Model}}
+    <tr>
+        <td>
+            ${i+1}
+        </td>
+        <td>
+            ${item.CDZ_Name}
+        </td>
+        <td>
+            ${item.CDZ_Price}
+        </td>
+        <td>
+            <button data-id="${item.CDZ_ID}" class="glyphicon glyphicon-edit btn_edit" data-type="C">&nbsp;Edit&nbsp;</button>
+            <br><label> </label><br>
+            <button data-id="${item.CDZ_ID}" class="glyphicon glyphicon-remove btn_remove" data-type="C">Remove</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>

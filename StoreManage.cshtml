@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "StoreManage";
+}
+
+<div id="wrap" class="flex-row flex-vertical">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <span id="back" class="glyphicon glyphicon-arrow-left pull-left"></span>
+                <span id="close" class="glyphicon glyphicon-remove pull-right"></span>
+                <h3 id="title">Store Manage</h3>
+            </div>
+        </div>
+    </header>
+    <div id="main" class="flex-con">
+    </div>
+    <footer class="bt">
+        <ul class="flex-row list-unstyled">
+           
+            <li tapmode="hover" class="flex-con active" data-index="0"><i class="fa fa-plus"></i>Goods</li>
+            <li tapmode="hover" class="flex-con" data-index="1"><i class="fa fa-plus"></i>Coupons</li>
+            <li tapmode="hover" class="flex-con" data-index="2"><i class="fa fa-home"></i>Modify Info</li>
+            <li tapmode="hover" class="flex-con" data-index="3"><i class="fa fa-search"></i>Verification</li>
+        </ul>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $api.fixStatusBar($api.dom('header'));
+        setHeaderBtn();
+        getUserDevice();
+        openFrameGroup();
+        $("footer").on("click", ".flex-con", randomSwitchBtn);
+    });
+
+    function openFrameGroup() {
+        api.openFrameGroup({
+            name: 'storemanage_group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: $("header").outerHeight(true),
+                w: $(window).width(),
+                h: $("#main").outerHeight(true)
+            },
+            index: 0,
+            preload: 0,
+            frames: [
+                {
+                    name: 'storemanage_goodscreate',
+                    url: 'template.html',
+                    bounces: false,
+                    pageParam: { id: uid }
+                },
+                {
+                    name: 'storemanage_couponcreate',
+                    url: 'template.html',
+                    bounces: false,
+                    pageParam: { id: uid }
+                },
+                {
+                    name: 'storemanage_goodscoupon',
+                    url: 'template.html',
+                    bounces: false,
+                    pageParam: { id: uid }
+                },
+                {
+                    name: 'storemanage_verification',
+                    url: 'template.html',
+                    bounces: false,
+                    pageParam: { id: uid }
+                }
+            ]
+        }, function (ret, err) {
+        });
+    }
+
+    function randomSwitchBtn() {
+        if ($(this).hasClass("active")) { return; }
+        var menuList = $("footer .flex-con");
+        menuList.removeClass("active");
+        $(this).addClass('active');
+
+        var index = $(this).attr("data-index");
+
+        api.setFrameGroupIndex({
+            name: 'storemanage_group',
+            index: index
+        });
+
+        setShowFrame(index);
+    }
+
+    function setShowFrame(index) {
+        // 控制内部Frame显示
+        // Goods Coupon 列表
+        api.setFrameGroupAttr({
+            name: 'storemanage_gcgroup',
+            hidden: !(index == 2)
+        });
+    }
+</script>
